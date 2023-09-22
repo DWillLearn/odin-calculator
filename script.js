@@ -1,7 +1,14 @@
-const add = () => {};
+const add = (a, b) => {
+  return a + b;
+};
 
-const subtract = () => {};
+const subtract = (a, b) => {
+  return a - b;
+};
 
-const multiply = () => {};
-
-const divide = () => {};
+const multiply = (a, b) => {
+  return a * b;
+};
+const divide = (a, b) => {
+  return a / b;
+};
