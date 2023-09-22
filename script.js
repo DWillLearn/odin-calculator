@@ -43,23 +43,10 @@ const operate = (firstNum, operator, secondNum) => {
 let displayNum = "";
 
 //Function thats populates calculator display
-const calcDisplay = () => {
-  let calcText = document.querySelector(".screen--text");
-  let calcButtons = document.querySelectorAll(".row--button");
 
-  calcButtons.forEach((btn) => {
-    btn.addEventListener("click", (e) => {
-      displayNum += e.target.innerText;
-      switch (isNaN(parseInt(btn.innerText))) {
-        case true:
-          calcText.innerText = "";
-          break;
-        case false:
-          calcText.innerText = displayNum;
-          break;
-      }
-    });
-  });
-};
-
-calcDisplay();
+// Type in the first number
+//When operator is put in, store first number in num1
+//Also store operator in operateSymbol
+//Type in second number
+//When equals is put in, store second number in num2
+//Also run operate(num1, operateSymbol, num2)
