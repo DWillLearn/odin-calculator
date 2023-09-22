@@ -50,9 +50,16 @@ const calcDisplay = () => {
   calcButtons.forEach((btn) => {
     btn.addEventListener("click", (e) => {
       displayNum += e.target.innerText;
-      calcText.innerText = displayNum;
+      switch (isNaN(parseInt(btn.innerText))) {
+        case true:
+          calcText.innerText = "";
+          break;
+        case false:
+          calcText.innerText = displayNum;
+          break;
+      }
     });
   });
 };
 
-document.addEventListener("load", calcDisplay());
+calcDisplay();
