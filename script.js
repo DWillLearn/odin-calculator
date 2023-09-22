@@ -38,3 +38,21 @@ const operate = (firstNum, operator, secondNum) => {
       break;
   }
 };
+
+//Variable that stores display value
+let displayNum = "";
+
+//Function thats populates calculator display
+const calcDisplay = () => {
+  let calcText = document.querySelector(".screen--text");
+  let calcButtons = document.querySelectorAll(".row--button");
+
+  calcButtons.forEach((btn) => {
+    btn.addEventListener("click", (e) => {
+      displayNum += e.target.innerText;
+      calcText.innerText = displayNum;
+    });
+  });
+};
+
+document.addEventListener("load", calcDisplay());
