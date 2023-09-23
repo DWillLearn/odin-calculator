@@ -71,3 +71,9 @@ const isSymbol = (symbol) => {
       break;
   }
 };
+
+//Fix later: Add ability to string together operations
+//Add decimals, but not more than 1
+//Message if user tries to divide by 0
+//Add backspace
+//Add keyboard support
