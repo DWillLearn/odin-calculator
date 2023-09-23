@@ -1,18 +1,11 @@
 //Basic math functions
-const add = (a, b) => {
-  return a + b;
-};
+const add = (a, b) => a + b;
 
-const subtract = (a, b) => {
-  return a - b;
-};
+const subtract = (a, b) => a - b;
 
-const multiply = (a, b) => {
-  return a * b;
-};
-const divide = (a, b) => {
-  return a / b;
-};
+const multiply = (a, b) => a * b;
+
+const divide = (a, b) => a / b;
 
 //Variables for each part of calc operation
 let num1;
@@ -23,16 +16,16 @@ let num2;
 const operate = (firstNum, operator, secondNum) => {
   switch (operator) {
     case "+":
-      add(firstNum, secondNum);
+      displayNum = add(firstNum, secondNum);
       break;
     case "-":
-      subtract(firstNum, secondNum);
+      displayNum = subtract(firstNum, secondNum);
       break;
-    case "*":
-      multiply(firstNum, secondNum);
+    case "×":
+      displayNum = multiply(firstNum, secondNum);
       break;
-    case "/":
-      divide(firstNum, secondNum);
+    case "÷":
+      displayNum = divide(firstNum, secondNum);
       break;
     default:
       break;
@@ -62,19 +55,20 @@ calcButtons.forEach((btn) => {
 
 const isNum = (num) => {
   displayNum += num;
-  !num1 ? (num1 = displayNum) : (num2 = displayNum);
+  !operateSymbol ? (num1 = parseInt(displayNum)) : (num2 = parseInt(displayNum));
 };
 
 const isSymbol = (symbol) => {
-  if (symbol != "=" && !operateSymbol) {
-    operateSymbol = symbol;
-  }
   displayNum = "";
+  if (symbol != "=" && symbol != "C" && !operateSymbol) operateSymbol = symbol;
+  switch (symbol) {
+    case "C":
+      num1 = undefined;
+      operateSymbol = undefined;
+      num2 = undefined;
+      break;
+    case "=":
+      operate(num1, operateSymbol, num2);
+      break;
+  }
 };
-
-// Type in the first number
-//When operator is put in, store first number in num1
-//Also store operator in operateSymbol
-//Type in second number
-//When equals is put in, store second number in num2
-//Also run operate(num1, operateSymbol, num2)
