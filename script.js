@@ -49,7 +49,6 @@ calcButtons.forEach((btn) => {
     isNaN(input) ? (showOnScreen = false) : (showOnScreen = true);
     showOnScreen ? isNum(input) : isSymbol(input);
     calcScreen.innerText = displayNum;
-    console.log(num1, operateSymbol, num2);
   });
 });
 
