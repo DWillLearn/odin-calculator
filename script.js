@@ -49,39 +49,29 @@ let calcScreen = document.querySelector(".screen--text");
 //All the calculator buttons
 let calcButtons = document.querySelectorAll(".row--button");
 
-//Function thats populates calculator display
-//If a calcButton that has showOnScreen as true is pressed, it becomes calcScreen's inner text
+//Functions that populate calculator display
 calcButtons.forEach((btn) => {
-  //sort calcButtons by number and operator
   btn.addEventListener("click", () => {
     let input = btn.innerText;
     isNaN(input) ? (showOnScreen = false) : (showOnScreen = true);
-    showOnScreen ? isNum(input) : isSymbol(output);
-
-    if (!showOnScreen && !num1) {
-      num1 = displayNum;
-      operateSymbol = input;
-      displayNum = "";
-    } else {
-      displayNum = "";
-    }
+    showOnScreen ? isNum(input) : isSymbol(input);
+    calcScreen.innerText = displayNum;
+    console.log(num1, operateSymbol, num2);
   });
 });
 
 const isNum = (num) => {
   displayNum += num;
-  calcScreen.innerText = displayNum;
+  !num1 ? (num1 = displayNum) : (num2 = displayNum);
 };
 
 const isSymbol = (symbol) => {
-  switch (symbol) {
-    case "=":
-      num2 = displayNum;
-      operate(num1, operateSymbol, num2);
-      break;
-    default:
+  if (symbol != "=" && !operateSymbol) {
+    operateSymbol = symbol;
   }
+  displayNum = "";
 };
+
 // Type in the first number
 //When operator is put in, store first number in num1
 //Also store operator in operateSymbol
