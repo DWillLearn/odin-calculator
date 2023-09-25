@@ -40,17 +40,19 @@ let showOnScreen;
 let calcScreen = document.querySelector(".screen--text");
 
 //All the calculator buttons
-let calcButtons = document.querySelectorAll(".row--button");
+let calcButtons = document.querySelector(".interface--buttons");
 
-//Functions that populate calculator display
-calcButtons.forEach((btn) => {
-  btn.addEventListener("click", () => {
-    let input = btn.innerText;
-    isNaN(input) ? (showOnScreen = false) : (showOnScreen = true);
-    showOnScreen ? isNum(input) : isSymbol(input);
-    calcScreen.innerText = displayNum;
-  });
+//Functions that populate calculator display based on keyboard input or mouse input
+
+// const displayCalc = () => {
+calcButtons.addEventListener("click", (e) => {
+  let input = e.target.innerText;
+  isNaN(input) ? (showOnScreen = false) : (showOnScreen = true);
+  showOnScreen ? isNum(input) : isSymbol(input);
+  calcScreen.innerText = displayNum;
 });
+
+// };
 
 const isNum = (num) => {
   displayNum += num;
