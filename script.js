@@ -21,10 +21,10 @@ const operate = (firstNum, operator, secondNum) => {
     case "-":
       displayNum = subtract(firstNum, secondNum);
       break;
-    case "×":
+    case "*":
       displayNum = multiply(firstNum, secondNum);
       break;
-    case "÷":
+    case "/":
       displayNum = divide(firstNum, secondNum);
       break;
     default:
@@ -54,7 +54,6 @@ calcButtons.addEventListener("click", (e) => displayCalc(e));
 
 const displayCalc = (e) => {
   let input = e.target.innerText;
-  console.log(input);
   isNaN(input) ? (showOnScreen = false) : (showOnScreen = true);
   showOnScreen ? isNum(input) : isSymbol(input);
   calcScreen.innerText = displayNum;
