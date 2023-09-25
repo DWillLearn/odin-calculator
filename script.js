@@ -5,7 +5,7 @@ const subtract = (a, b) => a - b;
 
 const multiply = (a, b) => a * b;
 
-const divide = (a, b) => a / b;
+const divide = (a, b) => (a == "0" || b == "0" ? ">:(" : a / b);
 
 //Variables for each part of calc operation
 let num1;
@@ -81,6 +81,4 @@ const isSymbol = (symbol) => {
 
 //Fix later: Add ability to string together operations
 //Add decimals, but not more than 1
-//Message if user tries to divide by 0
 //Add backspace
-//Add keyboard support
