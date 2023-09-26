@@ -11,21 +11,24 @@ const divide = (a, b) => (a == "0" || b == "0" ? ">:(" : a / b);
 let num1;
 let operateSymbol;
 let num2;
+let answer;
 
 //Operate function that takes operator and 2 numbers and calls one of the basic math functions on them
 const operate = (firstNum, operator, secondNum) => {
   switch (operator) {
     case "+":
-      displayNum = add(firstNum, secondNum);
+      answer = add(firstNum, secondNum);
       break;
     case "-":
-      displayNum = subtract(firstNum, secondNum);
+      answer = subtract(firstNum, secondNum);
       break;
     case "*":
-      displayNum = multiply(firstNum, secondNum);
+    case "×":
+      answer = multiply(firstNum, secondNum);
       break;
     case "/":
-      displayNum = divide(firstNum, secondNum);
+    case "÷":
+      answer = divide(firstNum, secondNum);
       break;
     default:
       break;
@@ -41,44 +44,69 @@ let calcScreen = document.querySelector(".screen--text");
 
 //All the calculator buttons
 let calcButtons = document.querySelector(".interface--buttons");
+let allBtn = calcButtons.querySelectorAll(".row--button");
 
 //Functions that populate calculator display based on keyboard input or mouse input
 document.addEventListener("keyup", (e) => {
-  let allBtn = calcButtons.querySelectorAll(".row--button");
   allBtn.forEach((btn) => {
-    if (e.key == btn.innerText) btn.click();
+    if (e.key == btn.innerText.toLowerCase()) btn.click();
   });
+  switch (e.key) {
+    case "/":
+    case "*":
+    case "Enter":
+      displayCalc(e.key);
+      break;
+    case "Backspace":
+      displayCalc("←");
+      break;
+    default:
+      break;
+  }
 });
 
-calcButtons.addEventListener("click", (e) => displayCalc(e));
+allBtn.forEach((btn) => {
+  btn.addEventListener("click", (e) => displayCalc(e.target.innerText));
+});
 
-const displayCalc = (e) => {
-  let input = e.target.innerText;
+const displayCalc = (button) => {
+  let input = button;
   isNaN(input) ? (showOnScreen = false) : (showOnScreen = true);
   showOnScreen ? isNum(input) : isSymbol(input);
   calcScreen.innerText = displayNum;
 };
 
 const isNum = (num) => {
-  displayNum += num;
+  num === displayNum ? (displayNum = num) : (displayNum += num);
   !operateSymbol ? (num1 = parseInt(displayNum)) : (num2 = parseInt(displayNum));
 };
 
 const isSymbol = (symbol) => {
-  displayNum = "";
-  if (symbol != "=" && symbol != "C" && !operateSymbol) operateSymbol = symbol;
+  if (symbol != "←") displayNum = "";
+  if (symbol != "=" && symbol != "C" && symbol != "←" && !operateSymbol) operateSymbol = symbol;
   switch (symbol) {
     case "C":
-      num1 = undefined;
-      operateSymbol = undefined;
-      num2 = undefined;
+      clear();
       break;
+    case "←":
+      if (displayNum === answer) return;
+      displayNum = displayNum.slice(0, -1);
+      isNum(displayNum);
+
+      break;
+    case "Enter":
     case "=":
       operate(num1, operateSymbol, num2);
+      displayNum = answer;
       break;
   }
 };
 
+const clear = () => {
+  num1 = undefined;
+  operateSymbol = undefined;
+  num2 = undefined;
+};
+
 //Fix later: Add ability to string together operations
 //Add decimals, but not more than 1
-//Add backspace
