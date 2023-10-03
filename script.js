@@ -47,27 +47,31 @@ let calcButtons = document.querySelector(".interface--buttons");
 let allBtn = calcButtons.querySelectorAll(".row--button");
 
 //Functions that populate calculator display based on keyboard input or mouse input
-document.addEventListener("keyup", (e) => {
-  allBtn.forEach((btn) => {
-    if (e.key == btn.innerText.toLowerCase()) btn.click();
+const keyInput = () => {
+  document.addEventListener("keyup", (e) => {
+    allBtn.forEach((btn) => {
+      switch (e.key) {
+        case btn.innerText.toLowerCase():
+        case "/":
+        case "*":
+        case "Enter":
+          displayCalc(e.key);
+          break;
+        case "Backspace":
+          displayCalc("←");
+          break;
+        default:
+          break;
+      }
+    });
   });
-  switch (e.key) {
-    case "/":
-    case "*":
-    case "Enter":
-      displayCalc(e.key);
-      break;
-    case "Backspace":
-      displayCalc("←");
-      break;
-    default:
-      break;
-  }
-});
+};
 
-allBtn.forEach((btn) => {
-  btn.addEventListener("click", (e) => displayCalc(e.target.innerText));
-});
+const mouseInput = () => {
+  allBtn.forEach((btn) => {
+    btn.addEventListener("click", (e) => displayCalc(e.target.innerText));
+  });
+};
 
 const displayCalc = (button) => {
   let input = button;
@@ -77,7 +81,7 @@ const displayCalc = (button) => {
 };
 
 const isNum = (num) => {
-  num === displayNum ? (displayNum = num) : (displayNum += num);
+  num === displayNum ? (displayNum = num) : (displayNum += num); //fix this
   !operateSymbol ? (num1 = parseInt(displayNum)) : (num2 = parseInt(displayNum));
 };
 
@@ -90,8 +94,7 @@ const isSymbol = (symbol) => {
       break;
     case "←":
       if (displayNum === answer) return;
-      displayNum = displayNum.slice(0, -1);
-      isNum(displayNum);
+      displayNum.slice(0, -1);
 
       break;
     case "Enter":
@@ -110,3 +113,9 @@ const clear = () => {
 
 //Fix later: Add ability to string together operations
 //Add decimals, but not more than 1
+
+//Run initial functions on load
+window.addEventListener("load", (e) => {
+  keyInput();
+  mouseInput();
+});
