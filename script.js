@@ -1,5 +1,8 @@
+//Fix later: Add ability to string together operations
+
 const sortInput = (input) => {
   !isNaN(input) || (input == "." && !calcScreen.innerText.includes(".")) ? displayInput(input) : isSymbol(input);
+  console.log(num1, operateSymbol, num2);
 };
 
 //Variable storage
@@ -24,10 +27,16 @@ const isSymbol = (symbol) => {
     case "×":
     case "/":
     case "÷":
-      if (!operateSymbol) operateSymbol = symbol;
-      screenNums = calcScreen.innerText;
-      if (!num1) num1 = parseFloat(screenNums);
-      calcScreen.innerText = "";
+      if (!operateSymbol) {
+        screenNums = calcScreen.innerText;
+        num1 = parseFloat(screenNums);
+        operateSymbol = symbol;
+        calcScreen.innerText = "";
+      } else if (operateSymbol && !isNaN(calcScreen.innerText)) {
+        screenNums = calcScreen.innerText;
+        num2 = parseFloat(screenNums);
+        operate(num1, operateSymbol, num2);
+      }
       break;
     case "Enter":
     case "=":
@@ -75,9 +84,6 @@ const operate = (a, operator, b) => {
   }
   calcScreen.innerText = answer;
 };
-
-//Fix later: Add ability to string together operations
-//Add decimals, but not more than 1
 
 //Run initial functions on load
 window.addEventListener("load", () => {
