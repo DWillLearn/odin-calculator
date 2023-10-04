@@ -1,5 +1,5 @@
 const sortInput = (input) => {
-  !isNaN(input) || input == "." ? displayInput(input) : isSymbol(input);
+  !isNaN(input) || (input == "." && !calcScreen.innerText.includes(".")) ? displayInput(input) : isSymbol(input);
 };
 
 //Variable storage
