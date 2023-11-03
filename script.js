@@ -2,24 +2,41 @@
 
 const sortInput = (input) => {
   !isNaN(input) || (input == "." && !calcScreen.innerText.includes(".")) ? displayInput(input) : isSymbol(input);
-  console.log(num1, operateSymbol, num2);
 };
 
 //Variable storage
 let num1;
 let operateSymbol;
 let num2;
+let answer;
 
 //Calculator screen
 let calcScreen = document.querySelector(".screen--text");
 
 //Populate calculator screen with received input if it is a number, then send off to storage variable
 const displayInput = (num) => {
-  calcScreen.innerText += num;
+  if (!answer) {
+    calcScreen.innerText += num;
+  } else {
+    calcScreen.innerText = "";
+    calcScreen.innerText += num;
+  }
+  let screenNums = calcScreen.innerText;
+  // if (num1 && answer) {
+  //   num1 = parseFloat(answer);
+  // }
+  if (!operateSymbol) {
+    //fix this, num1 not changing
+    console.log("running");
+    num1 = parseFloat(screenNums);
+  } else {
+    num2 = parseFloat(screenNums);
+  }
+
+  console.log(`displayInput ${num1} ${operateSymbol} ${num2}`);
 };
 
 const isSymbol = (symbol) => {
-  let screenNums;
   switch (symbol) {
     case "+":
     case "-":
@@ -27,16 +44,10 @@ const isSymbol = (symbol) => {
     case "×":
     case "/":
     case "÷":
-      if (!operateSymbol) {
-        screenNums = calcScreen.innerText;
-        num1 = parseFloat(screenNums);
-        operateSymbol = symbol;
-        calcScreen.innerText = "";
-      } else if (operateSymbol && !isNaN(calcScreen.innerText)) {
-        screenNums = calcScreen.innerText;
-        num2 = parseFloat(screenNums);
-        operate(num1, operateSymbol, num2);
-      }
+      calcScreen.innerText = "";
+      operateSymbol = symbol;
+      if (num2) operate(num1, operateSymbol, num2);
+      console.log(`isSymbol ${num1} ${operateSymbol} ${num2}, ${answer}`);
       break;
     case "Enter":
     case "=":
@@ -54,6 +65,7 @@ const isSymbol = (symbol) => {
       num1 = undefined;
       operateSymbol = undefined;
       num2 = undefined;
+      answer = undefined;
       calcScreen.innerText = "";
       break;
     default:
@@ -63,7 +75,6 @@ const isSymbol = (symbol) => {
 
 //Operate function that takes operator and 2 numbers and calls one of the basic math functions on them
 const operate = (a, operator, b) => {
-  let answer;
   switch (operator) {
     case "+":
       answer = a + b;
