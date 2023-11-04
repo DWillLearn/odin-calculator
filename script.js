@@ -23,10 +23,18 @@ const isSymbol = (symbol) => {
     clear();
   } else if (symbol == "=") {
     assignNum(calcScreen.innerText);
-    operate(parseFloat(num1), operateSymbol, parseFloat(num2))
+    operate(parseFloat(num1), operateSymbol, parseFloat(num2));
   } else {
     operateSymbol = symbol;
     assignNum(calcScreen.innerText);
+    calcScreen.innerText = "";
+  }
+
+  if (answer && symbol != "=") {
+    num1 = undefined;
+    num2 = undefined;
+    assignNum(answer);
+    answer = undefined;
     calcScreen.innerText = "";
   }
 };
@@ -58,13 +66,15 @@ const operate = (a, operator, b) => {
   calcScreen.innerText = answer;
 };
 
+//Clear all progress
 const clear = () => {
   num1 = undefined;
   operateSymbol = undefined;
   num2 = undefined;
-  answer = undefined
+  answer = undefined;
   calcScreen.innerText = "";
 };
+
 //Run initial functions on load
 window.addEventListener("load", () => {
   //Send input to be sorted in another function
