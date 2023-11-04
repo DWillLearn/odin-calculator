@@ -62,6 +62,7 @@ const clear = () => {
   num1 = undefined;
   operateSymbol = undefined;
   num2 = undefined;
+  answer = undefined
   calcScreen.innerText = "";
 };
 //Run initial functions on load
