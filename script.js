@@ -19,28 +19,43 @@ const displayInput = (num) => {
 };
 
 const isSymbol = (symbol) => {
-  if (symbol == "C" || symbol == "c") {
-    clear();
-  } else if (symbol == "=") {
-    assignNum(calcScreen.innerText);
-    operate(parseFloat(num1), operateSymbol, parseFloat(num2));
-  } else {
-    operateSymbol = symbol;
-    assignNum(calcScreen.innerText);
-    calcScreen.innerText = "";
-  }
-
-  if (answer && symbol != "=") {
-    num1 = undefined;
-    num2 = undefined;
-    assignNum(answer);
-    answer = undefined;
-    calcScreen.innerText = "";
+  switch (symbol) {
+    case symbol.toUpperCase() == "C":
+      clear();
+      break;
+    case "=":
+      assignNum(calcScreen.innerText);
+      operate(parseFloat(num1), operateSymbol, parseFloat(num2));
+      break;
+    default:
+      isOperator(symbol);
+      break;
   }
 };
 
 const assignNum = (num) => {
   num1 ? (num2 = num) : (num1 = num);
+};
+
+const isOperator = (symbol) => {
+  if (!operateSymbol) {
+    operateSymbol = symbol;
+    assignNum(calcScreen.innerText);
+    calcScreen.innerText = "";
+  } else {
+    assignNum(calcScreen.innerText);
+    operate(parseFloat(num1), operateSymbol, parseFloat(num2));
+    nextProb(answer, symbol);
+  }
+};
+
+const nextProb = (ans, sym) => {
+  clear();
+  calcScreen.innerText = ans;
+  assignNum(ans);
+  operateSymbol = sym;
+  console.log(ans, sym);
+//Add a mutation observer for calcScreen later
 };
 
 //Operate function that takes operator and 2 numbers and calls one of the basic math functions on them
