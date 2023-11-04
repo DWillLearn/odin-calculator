@@ -15,62 +15,24 @@ let calcScreen = document.querySelector(".screen--text");
 
 //Populate calculator screen with received input if it is a number, then send off to storage variable
 const displayInput = (num) => {
-  if (!answer) {
-    calcScreen.innerText += num;
-  } else {
-    calcScreen.innerText = "";
-    calcScreen.innerText += num;
-  }
-  let screenNums = calcScreen.innerText;
-  // if (num1 && answer) {
-  //   num1 = parseFloat(answer);
-  // }
-  if (!operateSymbol) {
-    //fix this, num1 not changing
-    console.log("running");
-    num1 = parseFloat(screenNums);
-  } else {
-    num2 = parseFloat(screenNums);
-  }
-
-  console.log(`displayInput ${num1} ${operateSymbol} ${num2}`);
+  calcScreen.innerText += num;
 };
 
 const isSymbol = (symbol) => {
-  switch (symbol) {
-    case "+":
-    case "-":
-    case "*":
-    case "×":
-    case "/":
-    case "÷":
-      calcScreen.innerText = "";
-      operateSymbol = symbol;
-      if (num2) operate(num1, operateSymbol, num2);
-      console.log(`isSymbol ${num1} ${operateSymbol} ${num2}, ${answer}`);
-      break;
-    case "Enter":
-    case "=":
-      screenNums = calcScreen.innerText;
-      if (!num2) num2 = parseFloat(screenNums);
-      operate(num1, operateSymbol, num2);
-      break;
-    case "Backspace":
-    case "←":
-      screenNums = calcScreen.innerText;
-      calcScreen.innerText = screenNums.slice(0, -1);
-      break;
-    case "C":
-    case "c":
-      num1 = undefined;
-      operateSymbol = undefined;
-      num2 = undefined;
-      answer = undefined;
-      calcScreen.innerText = "";
-      break;
-    default:
-      break;
+  if (symbol == "C" || symbol == "c") {
+    clear();
+  } else if (symbol == "=") {
+    assignNum(calcScreen.innerText);
+    operate(parseFloat(num1), operateSymbol, parseFloat(num2))
+  } else {
+    operateSymbol = symbol;
+    assignNum(calcScreen.innerText);
+    calcScreen.innerText = "";
   }
+};
+
+const assignNum = (num) => {
+  num1 ? (num2 = num) : (num1 = num);
 };
 
 //Operate function that takes operator and 2 numbers and calls one of the basic math functions on them
@@ -96,6 +58,12 @@ const operate = (a, operator, b) => {
   calcScreen.innerText = answer;
 };
 
+const clear = () => {
+  num1 = undefined;
+  operateSymbol = undefined;
+  num2 = undefined;
+  calcScreen.innerText = "";
+};
 //Run initial functions on load
 window.addEventListener("load", () => {
   //Send input to be sorted in another function
