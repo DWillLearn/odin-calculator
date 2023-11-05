@@ -1,41 +1,46 @@
-//Fix later: Add ability to string together operations
+//Calculator screen
+let calcScreen = document.querySelector(".screen--text");
 
-const sortInput = (input) => {
-  !isNaN(input) || (input == "." && !calcScreen.innerText.includes(".")) ? displayInput(input) : isSymbol(input);
-  console.log(num1, operateSymbol, num2);
-};
+//Calc buttons
+let allBtn = document.querySelector(".interface--buttons");
 
-//Variable storage
+//Store all equation parts
 let num1;
 let operateSymbol;
 let num2;
 let answer;
 
-//Calculator screen
-let calcScreen = document.querySelector(".screen--text");
+//Send numbers and decimals to screen
+const sortInput = (input) => {
+  !isNaN(input) || (input == "." && !calcScreen.innerText.includes(".")) ? showInput(input) : isSymbol(input);
+  console.log(num1, operateSymbol, num2);
+};
 
-//Populate calculator screen with received input if it is a number, then send off to storage variable
-let inputObserver = new MutationObserver(screenChange);
-
-const screenChange = (input) => {};
-
-inputObserver.observe(calcScreen, { characterData: true, childList: true });
-
-const displayInput = (num) => {
+//Populate screen with what was clicked
+const showInput = (input) => {
   if (!answer) {
-    calcScreen.innerText += num;
+    calcScreen.innerText += input;
   } else {
-    // nextProb(answer, operateSymbol);
+    num1 = undefined;
+    num2 = undefined;
     calcScreen.innerText = "";
-    calcScreen.innerText += num;
+    assignNum(answer);
+    answer = undefined;
+    calcScreen.innerText += input;
   }
 };
 
+//Sort symbols
 const isSymbol = (symbol) => {
   switch (symbol) {
     case "C":
     case "c":
-      clear();
+      reset();
+      answer = undefined;
+      break;
+    case "←":
+    case "Backspace":
+      calcScreen.innerText = calcScreen.innerText.slice(0, -1);
       break;
     case "=":
       assignNum(calcScreen.innerText);
@@ -47,31 +52,27 @@ const isSymbol = (symbol) => {
   }
 };
 
-const assignNum = (num) => {
-  num1 ? (num2 = num) : (num1 = num);
-};
-
-const isOperator = (symbol) => {
-  if (!operateSymbol) {
-    operateSymbol = symbol;
+//Sort operators
+const isOperator = (operator) => {
+  if (!num1 && !operateSymbol) {
+    operateSymbol = operator;
     assignNum(calcScreen.innerText);
     calcScreen.innerText = "";
-  } else {
+  } else if (num1 && calcScreen.innerText != "") {
     assignNum(calcScreen.innerText);
     operate(parseFloat(num1), operateSymbol, parseFloat(num2));
-    nextProb(answer, symbol);
-    // operateSymbol = symbol;
+    operateSymbol = operator;
   }
 };
 
-const nextProb = (ans, sym) => {
-  clear();
-  assignNum(ans);
-  calcScreen.innerText = num1;
-  operateSymbol = sym;
+//Assign numbers to variables
+//Consider making this a mutation observer to block operator from running twice
+const assignNum = (num) => {
+  !num1 ? (num1 = num) : (num2 = num);
+  console.log("running");
 };
 
-//Operate function that takes operator and 2 numbers and calls one of the basic math functions on them
+//Perform equations
 const operate = (a, operator, b) => {
   switch (operator) {
     case "+":
@@ -92,22 +93,24 @@ const operate = (a, operator, b) => {
       break;
   }
   calcScreen.innerText = answer;
+  nextProb(answer);
 };
 
-//Clear all progress
-const clear = () => {
+const nextProb = (ans) => {
+  num1 = ans;
+  operateSymbol = undefined;
+  num2 = undefined;
+};
+
+//Reset all data
+const reset = () => {
   num1 = undefined;
   operateSymbol = undefined;
   num2 = undefined;
   answer = undefined;
   calcScreen.innerText = "";
-  console.log("cleared");
 };
 
-//Run initial functions on load
-window.addEventListener("load", () => {
-  //Send input to be sorted in another function
-  let allBtn = document.querySelector(".interface--buttons");
-  allBtn.onclick = (btn) => sortInput(btn.target.innerText);
-  document.onkeyup = (btn) => sortInput(btn.key);
-});
+//Handle mouse or key event
+allBtn.onclick = (btn) => sortInput(btn.target.innerText);
+document.onkeyup = (btn) => sortInput(btn.key);
