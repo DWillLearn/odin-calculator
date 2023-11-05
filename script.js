@@ -2,6 +2,7 @@
 
 const sortInput = (input) => {
   !isNaN(input) || (input == "." && !calcScreen.innerText.includes(".")) ? displayInput(input) : isSymbol(input);
+  console.log(num1, operateSymbol, num2);
 };
 
 //Variable storage
@@ -14,13 +15,26 @@ let answer;
 let calcScreen = document.querySelector(".screen--text");
 
 //Populate calculator screen with received input if it is a number, then send off to storage variable
+let inputObserver = new MutationObserver(screenChange);
+
+const screenChange = (input) => {};
+
+inputObserver.observe(calcScreen, { characterData: true, childList: true });
+
 const displayInput = (num) => {
-  calcScreen.innerText += num;
+  if (!answer) {
+    calcScreen.innerText += num;
+  } else {
+    // nextProb(answer, operateSymbol);
+    calcScreen.innerText = "";
+    calcScreen.innerText += num;
+  }
 };
 
 const isSymbol = (symbol) => {
   switch (symbol) {
-    case symbol.toUpperCase() == "C":
+    case "C":
+    case "c":
       clear();
       break;
     case "=":
@@ -46,16 +60,15 @@ const isOperator = (symbol) => {
     assignNum(calcScreen.innerText);
     operate(parseFloat(num1), operateSymbol, parseFloat(num2));
     nextProb(answer, symbol);
+    // operateSymbol = symbol;
   }
 };
 
 const nextProb = (ans, sym) => {
   clear();
-  calcScreen.innerText = ans;
   assignNum(ans);
+  calcScreen.innerText = num1;
   operateSymbol = sym;
-  console.log(ans, sym);
-//Add a mutation observer for calcScreen later
 };
 
 //Operate function that takes operator and 2 numbers and calls one of the basic math functions on them
@@ -88,6 +101,7 @@ const clear = () => {
   num2 = undefined;
   answer = undefined;
   calcScreen.innerText = "";
+  console.log("cleared");
 };
 
 //Run initial functions on load
