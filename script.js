@@ -12,7 +12,12 @@ let answer;
 
 //Send numbers and symbols to proper functions
 const sortInput = (input) => {
-  !isNaN(input) || (input == "." && !calcScreen.innerText.includes(".")) ? showInput(input) : isSymbol(input);
+  // !isNaN(input) || (input == "." && !calcScreen.innerText.includes(".")) ? showInput(input) : isSymbol(input);
+if(!isNaN(input) ||( input == "." && !calcScreen.innerText.includes("."))){
+  showInput(input);
+} else if (isNaN(input) && input != ".") {
+  isSymbol(input);
+}
 };
 
 //Populate screen with numbers and decimals
