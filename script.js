@@ -39,7 +39,9 @@ const isSymbol = (symbol) => {
       calcScreen.innerText = calcScreen.innerText.slice(0, -1);
       break;
     case "=":
-      operate(parseFloat(num1), operateSymbol, parseFloat(num2));
+      if (operateSymbol && num2) {
+        operate(parseFloat(num1), operateSymbol, parseFloat(num2));
+      }
       break;
     default:
       isOperator(symbol);
@@ -47,7 +49,6 @@ const isSymbol = (symbol) => {
   }
 };
 //Assign numbers to variables
-//Block operator from running twice & Clear screen when inputting num2 after solving first problem
 let inputObserver = new MutationObserver((screen) => {
   screen.forEach((mutation) => {
     if (mutation.addedNodes[0]) {
@@ -61,10 +62,10 @@ inputObserver.observe(calcScreen, { childList: true, characterData: true });
 
 //Assign operators to variable
 const isOperator = (operator) => {
-  if (!operateSymbol) {
+  if (num1 && !operateSymbol) {
     operateSymbol = operator;
     calcScreen.innerText = "";
-  } else {
+  } else if (operateSymbol && num2) {
     operate(parseFloat(num1), operateSymbol, parseFloat(num2));
     operateSymbol = operator;
   }
