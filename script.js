@@ -17,14 +17,13 @@ const sortInput = (input) => {
 
 //Populate screen with numbers and decimals
 const showInput = (input) => {
-  calcScreen.innerText += input;
-  // } else {
-  //   num1 = undefined;
-  //   num2 = undefined;
-  //   calcScreen.innerText = "";
-  //   answer = undefined;
-  //   calcScreen.innerText += input;
-  // }
+  if (!answer) {
+    calcScreen.innerText += input;
+  } else {
+    calcScreen.innerText = "";
+    answer = undefined;
+    calcScreen.innerText += input;
+  }
 };
 
 //Sort symbols
@@ -48,7 +47,7 @@ const isSymbol = (symbol) => {
   }
 };
 //Assign numbers to variables
-//Consider making this a mutation observer to block operator from running twice
+//Block operator from running twice & Clear screen when inputting num2 after solving first problem
 let inputObserver = new MutationObserver((screen) => {
   screen.forEach((mutation) => {
     if (mutation.addedNodes[0]) {
@@ -92,11 +91,12 @@ const operate = (a, operator, b) => {
       break;
   }
   calcScreen.innerText = answer;
-  nextProb(answer);
+  nextProb();
 };
 
-const nextProb = (ans) => {
+const nextProb = () => {
   num1 = undefined;
+  operateSymbol = undefined;
   num2 = undefined;
 };
 
