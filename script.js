@@ -2,7 +2,7 @@
 let calcScreen = document.querySelector(".screen--text");
 
 //Calc buttons
-let allBtn = document.querySelector(".interface--buttons");
+let allBtn = document.querySelectorAll(".row--button");
 
 //Store all equation parts
 let num1;
@@ -39,6 +39,7 @@ const isSymbol = (symbol) => {
       calcScreen.innerText = calcScreen.innerText.slice(0, -1);
       break;
     case "=":
+    case "Enter":
       if (operateSymbol && num2) {
         operate(parseFloat(num1), operateSymbol, parseFloat(num2));
       }
@@ -51,7 +52,7 @@ const isSymbol = (symbol) => {
 //Assign numbers to variables
 let inputObserver = new MutationObserver((screen) => {
   screen.forEach((mutation) => {
-    if (mutation.addedNodes[0]) {
+    if (mutation.addedNodes[0] && answer != ">:(") {
       num1 && operateSymbol ? (num2 = mutation.target.innerText) : (num1 = mutation.target.innerText);
     }
     console.log(mutation.target.innerText, num1, operateSymbol, num2);
@@ -86,7 +87,11 @@ const operate = (a, operator, b) => {
       break;
     case "/":
     case "÷":
-      a == "0" || b == "0" ? (answer = ">:(") : (answer = a / b);
+      if (a == "0" || b == "0") {
+        answer = ">:(";
+      } else {
+        answer = a / b;
+      }
       break;
     default:
       break;
@@ -111,5 +116,21 @@ const reset = () => {
 };
 
 //Handle mouse or key event
-allBtn.onclick = (btn) => sortInput(btn.target.innerText);
-document.onkeyup = (btn) => sortInput(btn.key);
+allBtn.forEach((btn) => (btn.onclick = (calc) => sortInput(calc.target.innerText)));
+document.onkeyup = (btn) => {
+  allBtn.forEach((calc) => {
+    switch (btn.key) {
+      case calc.innerText:
+      case "Enter":
+      case "Backspace":
+      case "c":
+      case "C":
+      case "*":
+      case "/":
+      case "-":
+        btn.preventDefault();
+        sortInput(btn.key);
+        break;
+    }
+  });
+};
