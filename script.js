@@ -10,24 +10,21 @@ let operateSymbol;
 let num2;
 let answer;
 
-//Send numbers and decimals to screen
+//Send numbers and symbols to proper functions
 const sortInput = (input) => {
   !isNaN(input) || (input == "." && !calcScreen.innerText.includes(".")) ? showInput(input) : isSymbol(input);
-  console.log(num1, operateSymbol, num2);
 };
 
-//Populate screen with what was clicked
+//Populate screen with numbers and decimals
 const showInput = (input) => {
-  if (!answer) {
-    calcScreen.innerText += input;
-  } else {
-    num1 = undefined;
-    num2 = undefined;
-    calcScreen.innerText = "";
-    assignNum(answer);
-    answer = undefined;
-    calcScreen.innerText += input;
-  }
+  calcScreen.innerText += input;
+  // } else {
+  //   num1 = undefined;
+  //   num2 = undefined;
+  //   calcScreen.innerText = "";
+  //   answer = undefined;
+  //   calcScreen.innerText += input;
+  // }
 };
 
 //Sort symbols
@@ -43,7 +40,6 @@ const isSymbol = (symbol) => {
       calcScreen.innerText = calcScreen.innerText.slice(0, -1);
       break;
     case "=":
-      assignNum(calcScreen.innerText);
       operate(parseFloat(num1), operateSymbol, parseFloat(num2));
       break;
     default:
@@ -51,25 +47,28 @@ const isSymbol = (symbol) => {
       break;
   }
 };
+//Assign numbers to variables
+//Consider making this a mutation observer to block operator from running twice
+let inputObserver = new MutationObserver((screen) => {
+  screen.forEach((mutation) => {
+    if (mutation.addedNodes[0]) {
+      num1 && operateSymbol ? (num2 = mutation.target.innerText) : (num1 = mutation.target.innerText);
+    }
+    console.log(mutation.target.innerText, num1, operateSymbol, num2);
+  });
+});
 
-//Sort operators
+inputObserver.observe(calcScreen, { childList: true, characterData: true });
+
+//Assign operators to variable
 const isOperator = (operator) => {
-  if (!num1 && !operateSymbol) {
+  if (!operateSymbol) {
     operateSymbol = operator;
-    assignNum(calcScreen.innerText);
     calcScreen.innerText = "";
-  } else if (num1 && calcScreen.innerText != "") {
-    assignNum(calcScreen.innerText);
+  } else {
     operate(parseFloat(num1), operateSymbol, parseFloat(num2));
     operateSymbol = operator;
   }
-};
-
-//Assign numbers to variables
-//Consider making this a mutation observer to block operator from running twice
-const assignNum = (num) => {
-  !num1 ? (num1 = num) : (num2 = num);
-  console.log("running");
 };
 
 //Perform equations
@@ -97,8 +96,7 @@ const operate = (a, operator, b) => {
 };
 
 const nextProb = (ans) => {
-  num1 = ans;
-  operateSymbol = undefined;
+  num1 = undefined;
   num2 = undefined;
 };
 
