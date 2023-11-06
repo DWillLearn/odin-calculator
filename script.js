@@ -101,7 +101,7 @@ const operate = (a, operator, b) => {
     default:
       break;
   }
-  answer = answer.toFixed(2);
+  if(answer.toString().includes('.')) answer = answer.toFixed(2);
   calcScreen.innerText = answer;
   nextProb();
 };
