@@ -49,13 +49,13 @@ const isSymbol = (symbol) => {
       break;
   }
 };
+
 //Assign numbers to variables
 let inputObserver = new MutationObserver((screen) => {
   screen.forEach((mutation) => {
     if (mutation.addedNodes[0] && answer != ">:(") {
       num1 && operateSymbol ? (num2 = mutation.target.innerText) : (num1 = mutation.target.innerText);
     }
-    console.log(mutation.target.innerText, num1, operateSymbol, num2);
   });
 });
 
